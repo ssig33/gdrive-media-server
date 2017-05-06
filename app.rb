@@ -15,7 +15,7 @@ use Rack::Session::Cookie, :secret => 'ohmysecret!!'
 helpers do
   def query_builder q
     q.gsub("'", ' ').split(" ").map{|x|
-      "(fullText contains '#{x}')"
+      "(title contains '#{x}')"
     }.join(" and ")
   end
 
