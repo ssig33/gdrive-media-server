@@ -1,3 +1,4 @@
+<meta content='width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
 %title GDrive Media Server
 %iframe(allowfullscreen)
 %div.center
@@ -10,7 +11,7 @@
     %a{href: "/home"} GDrive Media Server
   %form
     %input(name="query" value="#{params[:query]}")
-    %button Search
+    %button.search Search
   %ul
     -@files.each do |file|
       %li.media
@@ -91,6 +92,11 @@
   .center{
     text-align:center;
   }
+  
+  .search {
+    background-color:black;
+    color:white;
+  }
 
   #close{
     font-size:xx-large;
@@ -131,4 +137,5 @@
     margin-right: auto;
     text-align: left;
   }
+  
 
