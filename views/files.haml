@@ -1,0 +1,134 @@
+%title GDrive Media Server
+%iframe(allowfullscreen)
+%div.center
+  %h2#title
+  %button#close Stop
+#content
+  %p
+    Welcome! #{session[:email]}
+  %h1
+    %a{href: "/home"} GDrive Media Server
+  %form
+    %input(name="query" value="#{params[:query]}")
+    %button Search
+  %ul
+    -@files.each do |file|
+      %li.media
+        %span.new.notnew{id: "new_#{file[:id]}"} New
+        %a.files{id: file[:id], href: "javascript:void(0)", "data-link"=> embed(file[:embed_link])}=file[:original_filename]
+        %span.weak.timestamp=file[:created_date].to_time.to_i*1000
+  -if @next_page_token
+    %div
+      %a{rel: "next", href: next_page()} Next
+    
+:javascript
+  const chkStatus = ()=>{
+    const ids = Array.prototype.map.call(document.querySelectorAll('.files'), (e)=>{return e.id});
+    const xhr = new  XMLHttpRequest();
+    xhr.addEventListener('load', (e)=>{
+      JSON.parse(xhr.responseText).forEach((d)=>{
+        if(!d.watched){
+          document.querySelector("#new_"+d.id).classList.remove("notnew");
+        } else {
+          document.querySelector("#new_"+d.id).classList.add("notnew");
+        }
+      });
+    });
+    xhr.open('POST', '/api/status', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(ids));
+  }
+
+  const watched = (id)=>{
+    const xhr = new  XMLHttpRequest();
+    xhr.addEventListener('load', (e)=>{
+      chkStatus();
+    });
+    xhr.open('POST', '/api/watch', true);
+    xhr.send(id);
+  }
+  
+  chkStatus();
+  
+  document.querySelector('#close').addEventListener('click', (e)=>{
+    const iframe = document.querySelector('iframe');
+    iframe.src = null;
+    iframe.style.display = 'none';
+    e.target.style.display = 'none';
+    document.querySelector('#title').textContent = '';
+  });
+
+  document.querySelectorAll("a.files").forEach((n)=>{
+    n.addEventListener("click", (e)=>{  
+      const iframe = document.querySelector('iframe');
+      iframe.src = e.target.dataset.link;
+      iframe.style.display = "block";
+      document.querySelector('#close').style.display = 'inline';
+      document.querySelector('#title').textContent = e.target.textContent;
+      watched(e.target.id);
+    });
+  });
+  document.querySelectorAll('.timestamp').forEach((n)=>{
+    const str = String(new Date(parseInt(n.textContent))).replace(/GMT....../, '');
+    n.innerHTML = str;
+  });
+
+:css
+  iframe{
+    width: 100%;
+    height: 100%;
+    display:none;
+  }
+
+  .new{
+    color:lightgreen;
+    font-weight:bold;
+  }
+  .notnew{
+    color:black;
+  }
+
+  .center{
+    text-align:center;
+  }
+
+  #close{
+    font-size:xx-large;
+    border-radius:10px;
+    padding: 15px 40px;
+    margin: 30px;
+    background:red;
+    color:white;
+    display:none;
+  }
+  html,body{
+    background: black;
+    color:white;
+  }
+  ul{
+    padding: 0;
+  }
+  a{
+    color:white;
+  }
+  .weak{
+    color:lightgrey;
+    font-size:small;
+  }
+  .media{
+    padding-top: 6px;
+    padding-bottom: 6px;
+    list-style:none;
+    font-size:large;
+    border-bottom: solid 1px grey;
+  }
+  .media a{
+    text-decoration:none;
+  }
+  #content{
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+

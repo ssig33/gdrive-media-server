@@ -1,0 +1,74 @@
+%title GDrive Media Server
+%iframe(allowfullscreen)
+%div.center
+  %h2#title
+  %button#close Stop
+#content
+  %h1 GDrive Media Server
+  %h2 Whats?
+  %ul
+    %li Play your media stored on Google Drive easily and comfortable.
+    %li Designed for Barbarian.
+  %div
+    %a{href: "/auth"}
+      %img{width: "180px", src: "/google.png", alt: "Sign In with Google"}
+    
+:css
+  iframe{
+    width: 100%;
+    height: 100%;
+    display:none;
+  }
+
+  .new{
+    color:lightgreen;
+    font-weight:bold;
+  }
+  .notnew{
+    color:black;
+  }
+
+  .center{
+    text-align:center;
+  }
+
+  #close{
+    font-size:xx-large;
+    border-radius:10px;
+    padding: 15px 40px;
+    margin: 30px;
+    background:red;
+    color:white;
+    display:none;
+  }
+  html,body{
+    background: black;
+    color:white;
+  }
+  ul{
+    padding: 0;
+  }
+  a{
+    color:white;
+  }
+  .weak{
+    color:lightgrey;
+    font-size:small;
+  }
+  .media{
+    padding-top: 6px;
+    padding-bottom: 6px;
+    list-style:none;
+    font-size:large;
+    border-bottom: solid 1px grey;
+  }
+  .media a{
+    text-decoration:none;
+  }
+  #content{
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+
