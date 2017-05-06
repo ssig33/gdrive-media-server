@@ -30,7 +30,7 @@ helpers do
     client_opts = JSON.parse(session[:credentials])
     auth_client = Signet::OAuth2::Client.new(client_opts)
     drive = Google::Apis::DriveV2::DriveService.new
-    opts = {order_by: "modifiedDate desc", options: { authorization: auth_client }}
+    opts = {order_by: "createdDate desc", options: { authorization: auth_client }}
     unless query == ''
       opts[:q] =  query_builder(query)
     end
