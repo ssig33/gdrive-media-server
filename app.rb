@@ -45,6 +45,17 @@ helpers do
   def next_page
     request.path + "?" + [request.query_string, "page_token=#{@next_page_token}"].join("&")
   end
+
+  def duration i
+    m = i.to_i/1000/60
+    "#{m/60}:#{m%60}"
+  end
+
+  def media_info file
+    if file[:video_media_metadata]
+      "#{duration(file[:video_media_metadata][:duration_millis])} #{file[:video_media_metadata][:height]}p"
+    end
+  end
 end
 
 

@@ -18,6 +18,7 @@
         %span.new.notnew{id: "new_#{file[:id]}"} New
         %a.files{id: file[:id], href: "javascript:void(0)", "data-link"=> embed(file[:embed_link])}=file[:original_filename]
         %span.weak.timestamp=file[:created_date].to_time.to_i*1000
+        %span.info=media_info(file)
   -if @next_page_token
     %div
       %a{rel: "next", href: next_page()} Next
@@ -119,6 +120,10 @@
   }
   .weak{
     color:lightgrey;
+    font-size:small;
+  }
+  .info{
+    color:mistyrose;
     font-size:small;
   }
   .media{
