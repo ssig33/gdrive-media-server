@@ -26,8 +26,7 @@ helpers do
   def files query: "", page_token: ""
     page_token = page_token.to_s
     query = query.to_s
-    
-    client_opts = JSON.parse(session[:credentials])
+        client_opts = JSON.parse(session[:credentials])
     auth_client = Signet::OAuth2::Client.new(client_opts)
     drive = Google::Apis::DriveV2::DriveService.new
     opts = {order_by: "createdDate desc", options: { authorization: auth_client }}
@@ -38,17 +37,24 @@ helpers do
       opts[:page_token] = page_token
     end
     files = drive.list_files(opts)
-    
-    return files.to_h[:items].select{|x| x[:embed_link] }.select{|x| x[:original_filename]}, files.next_page_token
+        return files.to_h[:items].select{|x| x[:embed_link] }.select{|x| x[:original_filename]}, files.next_page_token
   end
 
   def next_page
     request.path + "?" + [request.query_string, "page_token=#{@next_page_token}"].join("&")
   end
 
+  def pad i
+    if i < 10
+      "0#{i}"
+    else
+      i.to_s
+    end
+  end
+
   def duration i
     m = i.to_i/1000/60
-    "#{m/60}:#{m%60}"
+    "#{pad(m/60)}:#{pad(m%60)}"
   end
 
   def media_info file
