@@ -15,7 +15,7 @@ use Rack::Session::Cookie, :secret => 'ohmysecret!!'
 helpers do
   def query_builder q
     q.gsub("'", ' ').split(" ").map{|x|
-      "(title contains '#{x}')"
+      "(fullText contains '#{x}')"
     }.join(" and ")
   end
 
@@ -26,18 +26,20 @@ helpers do
   def files query: "", page_token: ""
     page_token = page_token.to_s
     query = query.to_s
-        client_opts = JSON.parse(session[:credentials])
+    client_opts = JSON.parse(session[:credentials])
     auth_client = Signet::OAuth2::Client.new(client_opts)
     drive = Google::Apis::DriveV2::DriveService.new
-    opts = {order_by: "createdDate desc", options: { authorization: auth_client }}
+    opts = {options: { authorization: auth_client }}
     unless query == ''
       opts[:q] =  query_builder(query)
+    else
+      opts[:order_by] = "createdDate desc"
     end
     unless page_token == ''
       opts[:page_token] = page_token
     end
     files = drive.list_files(opts)
-        return files.to_h[:items].select{|x| x[:embed_link] }.select{|x| x[:original_filename]}, files.next_page_token
+    return files.to_h[:items].select{|x| x[:embed_link] }.select{|x| x[:original_filename]}, files.next_page_token
   end
 
   def next_page
