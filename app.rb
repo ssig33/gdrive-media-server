@@ -1,6 +1,6 @@
 require 'bundler'
 Bundler.require 
-require 'google/apis/drive_v2'
+require 'google/apis/drive_v3'
 require 'google/api_client/client_secrets'
 require 'digest/md5'
 
@@ -19,7 +19,8 @@ helpers do
     }.join(" and ")
   end
 
-  def  embed link
+  def  embed link 
+    link = link.web_view_link.sub("/view", "/preview")
     link += "&autoplay=1"
   end
 
@@ -28,18 +29,19 @@ helpers do
     query = query.to_s
     client_opts = JSON.parse(session[:credentials])
     auth_client = Signet::OAuth2::Client.new(client_opts)
-    drive = Google::Apis::DriveV2::DriveService.new
+    drive = Google::Apis::DriveV3::DriveService.new
     opts = {options: { authorization: auth_client }}
     unless query == ''
       opts[:q] =  query_builder(query)
     else
-      opts[:order_by] = "createdDate desc"
+      opts[:order_by] = "createdTime desc"
     end
     unless page_token == ''
       opts[:page_token] = page_token
     end
+    opts[:fields] = 'nextPageToken, files(id, name, created_time, video_media_metadata, webViewLink)'
     files = drive.list_files(opts)
-    return files.to_h[:items].select{|x| x[:embed_link] }.select{|x| x[:original_filename]}, files.next_page_token
+    return files.files, files.next_page_token
   end
 
   def next_page
@@ -60,8 +62,9 @@ helpers do
   end
 
   def media_info file
-    if file[:video_media_metadata]
-      "#{duration(file[:video_media_metadata][:duration_millis])} #{file[:video_media_metadata][:height]}p"
+    if file.video_media_metadata
+      p file
+      "#{duration(file.video_media_metadata.duration_millis)} #{file.video_media_metadata.height}p"
     end
   end
 end
