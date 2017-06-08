@@ -15,7 +15,7 @@ use Rack::Session::Cookie, :secret => 'ohmysecret!!'
 helpers do
   def query_builder q
     q.gsub("'", ' ').split(" ").map{|x|
-      "(name contains '#{x}')"
+      "(fullText contains '#{x}')"
     }.join(" and ")
   end
 
@@ -34,7 +34,7 @@ helpers do
     unless query == ''
       opts[:q] =  query_builder(query)
     else
-      opts[:order_by] = "createdTime desc"
+      opts[:order_by] = "modifiedTime desc"
     end
     unless page_token == ''
       opts[:page_token] = page_token
