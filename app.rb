@@ -33,9 +33,8 @@ helpers do
     opts = {options: { authorization: auth_client }}
     unless query == ''
       opts[:q] =  query_builder(query)
-    else
-      opts[:order_by] = "modifiedTime desc"
     end
+    opts[:order_by] = "modifiedTime desc"
     unless page_token == ''
       opts[:page_token] = page_token
     end
@@ -63,7 +62,6 @@ helpers do
 
   def media_info file
     if file.video_media_metadata
-      p file
       "#{duration(file.video_media_metadata.duration_millis)} #{file.video_media_metadata.height}p"
     end
   end
