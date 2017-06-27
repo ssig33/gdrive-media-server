@@ -10,7 +10,7 @@ if development?
   require 'sinatra/reloader'
 end
 
-use Rack::Session::Cookie, :secret => 'ohmysecret!!'
+use Rack::Session::Cookie, :secret => (ENV['COOKIE_SECRET'] || 'ohmysecret!!'), expire_after: 2592000
 
 helpers do
   def query_builder q
