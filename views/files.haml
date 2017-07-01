@@ -59,8 +59,8 @@
     e.target.style.display = 'none';
     document.querySelector('#title').textContent = '';
   });
-
-  document.querySelectorAll("a.files").forEach((n)=>{
+  
+   Array.prototype.slice.call(document.querySelectorAll("a.files"),0).forEach((n)=>{
     n.addEventListener("click", (e)=>{  
       const iframe = document.querySelector('iframe');
       iframe.src = e.target.dataset.link;
@@ -70,7 +70,7 @@
       watched(e.target.id);
     });
   });
-  document.querySelectorAll('.timestamp').forEach((n)=>{
+  Array.prototype.slice.call(document.querySelectorAll('.timestamp'),0).forEach((n)=>{
     const str = String(new Date(parseInt(n.textContent))).replace(/GMT....../, '');
     n.innerHTML = str;
   });
