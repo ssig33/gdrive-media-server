@@ -32,7 +32,9 @@ helpers do
     drive = Google::Apis::DriveV3::DriveService.new
     opts = {options: { authorization: auth_client }}
     unless query == ''
-      opts[:q] =  query_builder(query)
+      opts[:q] = query_builder(query)
+    else
+      opts[:q] = "(mimeType != 'application/pdf') and (mimeType != 'image/jpeg')"
     end
     opts[:order_by] = "modifiedTime desc"
     unless page_token == ''
@@ -40,7 +42,9 @@ helpers do
     end
     opts[:fields] = 'nextPageToken, files(id, name, created_time, video_media_metadata, webViewLink)'
     files = drive.list_files(opts)
-    return files.files, files.next_page_token
+    return files.files.select{|x|
+      x.video_media_metadata
+    }, files.next_page_token
   end
 
   def next_page
