@@ -21,7 +21,6 @@ helpers do
 
   def  embed link 
     link = link.web_view_link.sub("/view", "/preview")
-    link += "&autoplay=1"
   end
 
   def files query: "", page_token: ""
