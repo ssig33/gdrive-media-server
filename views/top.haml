@@ -1,19 +1,7 @@
 <meta content='width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'>
 %title GDrive Media Server
-%iframe(allowfullscreen)
-%div.center
-  %h2#title
-  %button#close Stop
-#content
-  %h1 GDrive Media Server
-  %h2 Whats?
-  %ul
-    %li Play your media stored on Google Drive easily and comfortable.
-    %li Designed for Barbarian.
-  %div
-    %a{href: "/auth"}
-      %img{width: "180px", src: "/google.png", alt: "Sign In with Google"}
-    
+:javascript
+  if(location.hostname === 'gdrive-media-server.ssig33.com' && location.protocol === 'http:'){ location.protocol = 'https'}
 :css
   iframe{
     width: 100%;
@@ -72,4 +60,17 @@
     margin-right: auto;
     text-align: left;
   }
+%iframe(allowfullscreen)
+%div.center
+  %h2#title
+  %button#close Stop
+#content
+  %h1 GDrive Media Server
+  %h2 Whats?
+  %ul
+    %li Play your media stored on Google Drive easily and comfortable.
+    %li Designed for Barbarian.
+  %div
+    %a{href: "/auth"}
+      %img{width: "180px", src: "/google.png", alt: "Sign In with Google"}
 
