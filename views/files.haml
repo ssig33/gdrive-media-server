@@ -85,11 +85,17 @@
     %button.search Search
   %ul
     -@files.each do |file|
-      %li.media
-        %span.new.notnew{id: "new_#{file.id}"} New
-        %a.files{id: file.id, href: "javascript:void(0)", "data-link"=> embed(file)}=file.name
-        %span.weak.timestamp=file.created_time.to_time.to_i*1000
-        %span.info=media_info(file)
+      - if mobile?
+        %li.media
+          %a{href: file.web_view_link}=file.name
+          %span.weak.timestamp=file.created_time.to_time.to_i*1000
+          %span.info=media_info(file)
+      - else
+        %li.media
+          %span.new.notnew{id: "new_#{file.id}"} New
+          %a.files{id: file.id, href: "javascript:void(0)", "data-link"=> embed(file)}=file.name
+          %span.weak.timestamp=file.created_time.to_time.to_i*1000
+          %span.info=media_info(file)
   -if @next_page_token
     %div
       %a{rel: "next", href: next_page()} Next

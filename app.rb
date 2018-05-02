@@ -68,6 +68,10 @@ helpers do
       "#{duration(file.video_media_metadata.duration_millis)} #{file.video_media_metadata.height}p"
     end
   end
+
+  def mobile?
+    !!(request.user_agent =~ /iPhone/)
+  end
 end
 
 
