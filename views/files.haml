@@ -101,30 +101,22 @@
       %a{rel: "next", href: next_page()} Next
     
 :javascript
-  const chkStatus = ()=>{
-    const ids = Array.prototype.map.call(document.querySelectorAll('.files'), (e)=>{return e.id});
-    const xhr = new  XMLHttpRequest();
-    xhr.addEventListener('load', (e)=>{
-      JSON.parse(xhr.responseText).forEach((d)=>{
-        if(!d.watched){
-          document.querySelector("#new_"+d.id).classList.remove("notnew");
-        } else {
-          document.querySelector("#new_"+d.id).classList.add("notnew");
-        }
-      });
+  const chkStatus = async ()=>{
+    const ids = Array.from(document.querySelectorAll('.files')).map((e)=> e.id);
+    const res = await fetch('/api/status', {credential: 'same-origin', method: 'POST', body: JSON.stringify(ids), headers: {"Content-Type": 'application/json'}})
+    const data = await res.json();
+    data.forEach((d)=>{
+      if(!d.watched){
+        document.querySelector("#new_"+d.id).classList.remove("notnew");
+      } else {
+        document.querySelector("#new_"+d.id).classList.add("notnew");
+      }
     });
-    xhr.open('POST', '/api/status', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send(JSON.stringify(ids));
   }
 
-  const watched = (id)=>{
-    const xhr = new  XMLHttpRequest();
-    xhr.addEventListener('load', (e)=>{
-      chkStatus();
-    });
-    xhr.open('POST', '/api/watch', true);
-    xhr.send(id);
+  const watched = async (id)=>{
+    await fetch('/api/watch', {method: 'POST', credential: 'same-origin', body: id});
+    chkStatus();
   }
   
   chkStatus();
