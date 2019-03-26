@@ -59,8 +59,6 @@ get '/auth/google_oauth2/callback' do
   auth_client.code = request['code']
   auth_client.fetch_access_token!
   
-  session[:email] = JSON.parse(RestClient.get("https://www.googleapis.com/userinfo/email?alt=json&access_token=#{auth_client.access_token}").body)['data']['email']
-
   session[:credentials] = auth_client.to_json
 
   if session[:to]
