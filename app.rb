@@ -70,7 +70,7 @@ helpers do
   end
 
   def mobile?
-    !!(request.user_agent =~ /iPhone|Android|SmartTV/)
+    !!(request.user_agent =~ /iPhone|Android|SmartTV|iPad/)
   end
 end
 
