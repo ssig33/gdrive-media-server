@@ -19,7 +19,7 @@
     -@files.each do |file|
       %li.media
         %span.new.notnew{id: "new_#{file.id}"} New
-        %a.files{id: file.id, href: file.web_view_link, "data-link"=> embed(file)}=file.name
+        %a.files{id: file.id, href: file.web_view_link, "data-link"=> embed(file), target: "_blank"}=file.name
         %span.weak.timestamp=file.created_time.to_time.to_i*1000
         %span.info=media_info(file)
   -if @next_page_token
@@ -69,9 +69,7 @@
       });
     } else {
       n.addEventListener("click", async (e)=>{  
-        e.preventDefault();
         await watched(e.target.id);
-        window.open(e.target.href);
       });
     }
   });
