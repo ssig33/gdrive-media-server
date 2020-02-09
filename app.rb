@@ -95,13 +95,16 @@ end
 post '/api/status' do
   auth
   ary = JSON.parse(request.body.read)
-  keys = ary.map{|x| redis_key("#{x}/watched/#{session[:email]}") }
-  r = REDIS.mget(*keys)
-  result = []
-  ary.each_with_index{|id,i|
-    result << {id: id, watched: !!r[i]}
-  }
-  result.to_json
+  if ary.count  > 1
+    keys = ary.map{|x| redis_key("#{x}/watched/#{session[:email]}") }
+    r = REDIS.mget(*keys)
+    result = []
+    ary.each_with_index{|id,i|
+      result << {id: id, watched: !!r[i]}
+    }
+    return result.to_json
+  end
+  return 'ng'
 end
 
 post '/api/watch' do
